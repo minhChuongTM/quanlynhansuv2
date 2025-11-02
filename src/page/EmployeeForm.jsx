@@ -29,7 +29,7 @@ function EmployeeForm({ employee, onClose }) {
                     cancellationText: "Hủy",
                 });
 
-                const result = await dispatch(editEmployee({ ...values, id: employee.id }));
+                const result = await dispatch(editEmployee({ ...values, id: employee.id }).unwrap());
                 setSubmitting(false);
 
                 if (result.meta.requestStatus === "fulfilled") {
@@ -52,7 +52,7 @@ function EmployeeForm({ employee, onClose }) {
                     cancellationText: "Hủy",
                 });
 
-                const result = await dispatch(addEmployee(values));
+                const result = await dispatch(addEmployee(values).unwrap());
                 setSubmitting(false);
 
                 if (result.meta.requestStatus === "fulfilled") {
