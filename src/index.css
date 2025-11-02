@@ -1,0 +1,6 @@
+@import "tailwindcss";
+* {
+    max-width: 1429px;
+    box-sizing: border-box;
+    margin-inline: auto;
+}
