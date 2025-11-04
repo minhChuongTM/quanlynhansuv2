@@ -18,7 +18,7 @@ function Header() {
                         </div>
 
                         <div>
-                            <Link to={"/addEmployee"} className="hover:text-yellow-300 transition duration-200 p-4">
+                            <Link to={"/addEmployees"} className="hover:text-yellow-300 transition duration-200 p-4">
                                 Thêm nhân sự
                             </Link>
                         </div>

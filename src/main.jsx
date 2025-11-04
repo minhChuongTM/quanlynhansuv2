@@ -12,29 +12,29 @@ createRoot(document.getElementById("root")).render(
     <StrictMode>
         <Provider store={store}>
             <BrowserRouter>
-            <ConfirmProvider
-            defaultOptions={{
-                title: 'Xác nhận',
-                confirmationText: 'Xác nhận',
-                cancellationText: 'Hủy',
-                confirmationButtonProps: { variant: 'contained', color: 'primary' },
-                cancellationButtonProps: { variant: 'outlined' }
-            }}
-            >
-            <App />
-            <ToastContainer
-                position="top-right"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
-            </ConfirmProvider>
+                <ConfirmProvider
+                    defaultOptions={{
+                        title: "Xác nhận",
+                        confirmationText: "Xác nhận",
+                        cancellationText: "Hủy",
+                        confirmationButtonProps: { variant: "contained", color: "primary" },
+                        cancellationButtonProps: { variant: "outlined" },
+                    }}
+                >
+                    <App />
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={3000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="light"
+                    />
+                </ConfirmProvider>
             </BrowserRouter>
         </Provider>
     </StrictMode>

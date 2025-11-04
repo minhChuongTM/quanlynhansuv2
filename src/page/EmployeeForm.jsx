@@ -1,49 +1,57 @@
 import { useConfirm } from "material-ui-confirm";
 import { useDispatch, useSelector } from "react-redux";
 import { DEPARTMENTS, employeeSchema, POSITIONS, validateWithJoi } from "../utils/employeeSchema";
-import { addEmployee, editEmployee, selectLoading } from "../redux/slice/employeeSlice";
+import { addEmployee, editEmployee, selectEmployeeList, selectLoading } from "../redux/slice/employeeSlice";
 import { toast } from "react-toastify";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useParams } from "react-router-dom";
+import "./style.css"
 
-function EmployeeForm({ employee, onClose }) {
-    const dispatch = useDispatch();
-    const loading = useSelector(selectLoading);
-    const confirm = useConfirm();
+function EmployeeForm({ onClose }) {
+    const dispatch = useDispatch(); // useDispatch() dùng để gửi các action đến Redux store
+    const loading = useSelector(selectLoading); // useSelector() dùng để truy cập trạng thái từ Redux store. selectLoading là một selector function được định nghĩa trong employeeSlice.js để lấy trạng thái loading từ slice nhân viên.
+    const confirm = useConfirm(); // Sử dụng hook useConfirm để hiển thị hộp thoại xác nhận
+    const { id } = useParams(); // Lấy id từ URL
+    const employees = useSelector(selectEmployeeList); // Lấy danh sách nhân viên từ Redux store
+
+    // Nếu có id trên URL, tìm nhân viên để sửa, nếu không thì là thêm mới
+    const employeeFind = employees?.find((emp) => emp.id === id); // Tìm nhân viên theo id
 
     const initialValues = {
-        fullName: employee?.fullName || "",
-        email: employee?.email || "",
-        department: DEPARTMENTS.includes(employee?.department) ? employee.department : "",
-        position: POSITIONS.includes(employee?.position) ? employee.position : "",
-        startDate: employee?.startDate || "",
+        fullName: employeeFind?.fullName || "",
+        email: employeeFind?.email || "",
+        department: DEPARTMENTS.includes(employeeFind?.department) ? employeeFind.department : "",
+        position: POSITIONS.includes(employeeFind?.position) ? employeeFind.position : "",
+        startDate: employeeFind?.startDate || "",
     };
+    console.log("employeeFind:", employeeFind);
     const handleFormSubmit = async (values, { setSubmitting }) => {
         console.log(values);
         try {
-            // if (employee) {
-            //     await confirm({
-            //         title: "Xác nhận cập nhật",
-            //         description: `Bạn có chắc chắn muốn cập nhật thông tin nhân viên "${values.fullName}"?`,
-            //         confirmationText: "Cập nhật",
-            //         cancellationText: "Hủy",
-            //     });
+            if (employeeFind) {
+                await confirm({
+                    title: "Xác nhận cập nhật",
+                    description: `Bạn có chắc chắn muốn cập nhật thông tin nhân viên "${values.fullName}"?`,
+                    confirmationText: "Cập nhật",
+                    cancellationText: "Hủy",
+                });
 
-            //     const result = await dispatch(editEmployee({ ...values, id: employee.id }).unwrap());
-            //     setSubmitting(false);
+                const result = await dispatch(editEmployee({ ...values, id: employeeFind.id }).unwrap());
+                setSubmitting(false);
 
-            //     if (result.meta.requestStatus === "fulfilled") {
-            //         toast.success("Cập nhật thông tin nhân viên thành công!", {
-            //             position: "top-right",
-            //             autoClose: 3000,
-            //         });
-            //         onClose();
-            //     } else {
-            //         toast.error("Có lỗi xảy ra khi cập nhật thông tin nhân viên!", {
-            //             position: "top-right",
-            //             autoClose: 3000,
-            //         });
-            //     }
-            // } else {
+                if (result.meta.requestStatus === "fulfilled") {
+                    toast.success("Cập nhật thông tin nhân viên thành công!", {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                    onClose();
+                } else {
+                    toast.error("Có lỗi xảy ra khi cập nhật thông tin nhân viên!", {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                }
+            } else {
                 await confirm({
                     title: "Xác nhận thêm mới",
                     description: `Bạn có chắc chắn muốn thêm nhân viên "${values.fullName}"?`,
@@ -51,7 +59,7 @@ function EmployeeForm({ employee, onClose }) {
                     cancellationText: "Hủy",
                 });
 
-                const result = await dispatch(addEmployee(values));
+                const result = await dispatch(addEmployee(values)); //dùng để gửi acstion thêm nhân viên mới
                 setSubmitting(false);
 
                 if (result.meta.requestStatus === "fulfilled") {
@@ -66,8 +74,8 @@ function EmployeeForm({ employee, onClose }) {
                         autoClose: 3000,
                     });
                 }
-            // }
-        } catch(error) {
+            }
+        } catch (error) {
             console.log(error);
             setSubmitting(false);
         }
@@ -84,7 +92,7 @@ function EmployeeForm({ employee, onClose }) {
                         paddingBottom: "10px",
                     }}
                 >
-                    {employee ? "Chỉnh sửa thông tin nhân viên" : "Thêm nhân viên mới"}
+                    {employeeFind ? "Chỉnh sửa thông tin nhân viên" : "Thêm nhân viên mới"}
                 </h2>
                 <Formik
                     initialValues={initialValues}
@@ -181,7 +189,7 @@ function EmployeeForm({ employee, onClose }) {
                                         Hủy
                                     </button>
                                     <button type="submit" className="btn btn-submit" disabled={loading || isSubmitting}>
-                                        {loading || isSubmitting ? "Đang xử lý..." : employee ? "Cập nhật" : "Thêm"}
+                                        {loading || isSubmitting ? "Đang xử lý..." : employeeFind ? "Cập nhật" : "Thêm"}
                                     </button>
                                 </div>
                             </Form>
