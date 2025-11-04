@@ -5,7 +5,7 @@ import { addEmployee, editEmployee, selectEmployeeList, selectLoading } from "..
 import { toast } from "react-toastify";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useParams } from "react-router-dom";
-import "./style.css";
+
 
 function EmployeeForm({ onClose }) {
     const dispatch = useDispatch(); // useDispatch() dùng để gửi các action đến Redux store

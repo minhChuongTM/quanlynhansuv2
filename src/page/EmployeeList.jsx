@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getEmployees, selectEmployeeList, removeEmployee, selectLoading } from "../redux/slice/employeeSlice";
 import { useConfirm } from "material-ui-confirm";
 import { toast } from "react-toastify";
-// import './Employee.css';
+
 
 const DEPARTMENTS = [
     "Engineering",
