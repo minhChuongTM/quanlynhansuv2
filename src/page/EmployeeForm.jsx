@@ -5,7 +5,7 @@ import { addEmployee, editEmployee, selectEmployeeList, selectLoading } from "..
 import { toast } from "react-toastify";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useParams } from "react-router-dom";
-import "./style.css"
+import "./style.css";
 
 function EmployeeForm({ onClose }) {
     const dispatch = useDispatch(); // useDispatch() dùng để gửi các action đến Redux store
@@ -82,18 +82,12 @@ function EmployeeForm({ onClose }) {
     };
 
     return (
-        <div>
-            <div className="form-content">
-                <h2
-                    style={{
-                        marginBottom: "30px",
-                        color: "#333",
-                        borderBottom: "2px solid #4CAF50",
-                        paddingBottom: "10px",
-                    }}
-                >
+        <div className="p-6 bg-gray-50 min-h-screen flex justify-center items-start">
+            <div className="w-full max-w-3xl bg-white rounded-xl shadow-md p-6 border border-gray-200">
+                <h2 className="text-2xl font-bold text-gray-800 border-b-2 border-green-500 pb-3 mb-6">
                     {employeeFind ? "Chỉnh sửa thông tin nhân viên" : "Thêm nhân viên mới"}
                 </h2>
+
                 <Formik
                     initialValues={initialValues}
                     validate={validateWithJoi(employeeSchema)}
@@ -101,99 +95,144 @@ function EmployeeForm({ onClose }) {
                     enableReinitialize
                 >
                     {({ errors, touched, isSubmitting }) => (
-                        <>
-                            <Form>
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label htmlFor="fullName">Họ và tên *</label>
-                                        <Field
-                                            type="text"
-                                            id="fullName"
-                                            name="fullName"
-                                            placeholder="Nhập họ và tên"
-                                            className={errors.fullName && touched.fullName ? "error-field" : ""}
-                                        />
-                                        <ErrorMessage name="fullName" component="div" className="error-message" />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="email">Email *</label>
-                                        <Field
-                                            type="email"
-                                            id="email"
-                                            name="email"
-                                            placeholder="Nhập email"
-                                            className={errors.email && touched.email ? "error-field" : ""}
-                                        />
-                                        <ErrorMessage name="email" component="div" className="error-message" />
-                                    </div>
+                        <Form className="space-y-6">
+                            {/* Họ và tên + Email */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
+                                        Họ và tên *
+                                    </label>
+                                    <Field
+                                        type="text"
+                                        id="fullName"
+                                        name="fullName"
+                                        placeholder="Nhập họ và tên"
+                                        className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 ${
+                                            errors.fullName && touched.fullName ? "border-red-500" : "border-gray-300"
+                                        }`}
+                                    />
+                                    <ErrorMessage
+                                        name="fullName"
+                                        component="div"
+                                        className="text-red-500 text-sm mt-1"
+                                    />
                                 </div>
 
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label htmlFor="department">Phòng ban *</label>
-                                        <Field
-                                            as="select"
-                                            id="department"
-                                            name="department"
-                                            className={`department-select ${
-                                                errors.department && touched.department ? "error-field" : ""
-                                            }`}
-                                        >
-                                            <option value="">-- Chọn phòng ban --</option>
-                                            {DEPARTMENTS.map((dept) => (
-                                                <option key={dept} value={dept}>
-                                                    {dept}
-                                                </option>
-                                            ))}
-                                        </Field>
-                                        <ErrorMessage name="department" component="div" className="error-message" />
-                                    </div>
+                                <div>
+                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                                        Email *
+                                    </label>
+                                    <Field
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        placeholder="Nhập email"
+                                        className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 ${
+                                            errors.email && touched.email ? "border-red-500" : "border-gray-300"
+                                        }`}
+                                    />
+                                    <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
+                                </div>
+                            </div>
 
-                                    <div className="form-group">
-                                        <label htmlFor="position">Chức vụ *</label>
-                                        <Field
-                                            as="select"
-                                            id="position"
-                                            name="position"
-                                            className={`position-select ${
-                                                errors.position && touched.position ? "error-field" : ""
-                                            }`}
-                                        >
-                                            <option value="">-- Chọn chức vụ --</option>
-                                            {POSITIONS.map((pos) => (
-                                                <option key={pos} value={pos}>
-                                                    {pos}
-                                                </option>
-                                            ))}
-                                        </Field>
-                                        <ErrorMessage name="position" component="div" className="error-message" />
-                                    </div>
+                            {/* Phòng ban + Chức vụ */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label
+                                        htmlFor="department"
+                                        className="block text-sm font-medium text-gray-700 mb-1"
+                                    >
+                                        Phòng ban *
+                                    </label>
+                                    <Field
+                                        as="select"
+                                        id="department"
+                                        name="department"
+                                        className={`w-full border rounded-lg px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-green-400 ${
+                                            errors.department && touched.department
+                                                ? "border-red-500"
+                                                : "border-gray-300"
+                                        }`}
+                                    >
+                                        <option value="">-- Chọn phòng ban --</option>
+                                        {DEPARTMENTS.map((dept) => (
+                                            <option key={dept} value={dept}>
+                                                {dept}
+                                            </option>
+                                        ))}
+                                    </Field>
+                                    <ErrorMessage
+                                        name="department"
+                                        component="div"
+                                        className="text-red-500 text-sm mt-1"
+                                    />
                                 </div>
 
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label htmlFor="startDate">Ngày vào làm *</label>
-                                        <Field
-                                            type="date"
-                                            id="startDate"
-                                            name="startDate"
-                                            className={errors.startDate && touched.startDate ? "error-field" : ""}
-                                        />
-                                        <ErrorMessage name="startDate" component="div" className="error-message" />
-                                    </div>
+                                <div>
+                                    <label htmlFor="position" className="block text-sm font-medium text-gray-700 mb-1">
+                                        Chức vụ *
+                                    </label>
+                                    <Field
+                                        as="select"
+                                        id="position"
+                                        name="position"
+                                        className={`w-full border rounded-lg px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-green-400 ${
+                                            errors.position && touched.position ? "border-red-500" : "border-gray-300"
+                                        }`}
+                                    >
+                                        <option value="">-- Chọn chức vụ --</option>
+                                        {POSITIONS.map((pos) => (
+                                            <option key={pos} value={pos}>
+                                                {pos}
+                                            </option>
+                                        ))}
+                                    </Field>
+                                    <ErrorMessage
+                                        name="position"
+                                        component="div"
+                                        className="text-red-500 text-sm mt-1"
+                                    />
                                 </div>
+                            </div>
 
-                                <div className="form-actions">
-                                    <button type="button" className="btn btn-cancel" onClick={() => onClose()}>
-                                        Hủy
-                                    </button>
-                                    <button type="submit" className="btn btn-submit" disabled={loading || isSubmitting}>
-                                        {loading || isSubmitting ? "Đang xử lý..." : employeeFind ? "Cập nhật" : "Thêm"}
-                                    </button>
-                                </div>
-                            </Form>
-                        </>
+                            {/* Ngày vào làm */}
+                            <div>
+                                <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">
+                                    Ngày vào làm *
+                                </label>
+                                <Field
+                                    type="date"
+                                    id="startDate"
+                                    name="startDate"
+                                    className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 ${
+                                        errors.startDate && touched.startDate ? "border-red-500" : "border-gray-300"
+                                    }`}
+                                />
+                                <ErrorMessage name="startDate" component="div" className="text-red-500 text-sm mt-1" />
+                            </div>
+
+                            {/* Buttons */}
+                            <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                                <button
+                                    type="button"
+                                    className="px-5 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium transition"
+                                    onClick={() => onClose()}
+                                >
+                                    Hủy
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={loading || isSubmitting}
+                                    className={`px-5 py-2 rounded-lg text-white font-medium transition ${
+                                        loading || isSubmitting
+                                            ? "bg-green-300 cursor-not-allowed"
+                                            : "bg-green-500 hover:bg-green-600"
+                                    }`}
+                                >
+                                    {loading || isSubmitting ? "Đang xử lý..." : employeeFind ? "Cập nhật" : "Thêm"}
+                                </button>
+                            </div>
+                        </Form>
                     )}
                 </Formik>
             </div>

@@ -89,41 +89,48 @@ function EmployeeList() {
         navigate(`/employee/edit/${employee.id}`);
     };
 
-   
-
     if (loading) {
         return <div className="loading">Đang tải dữ liệu...</div>;
     }
 
     return (
-        <div className="employee-list-container">
-            <div className="header-section">
-                <h2>Danh sách nhân viên</h2>
-              
+        <div className="p-6 bg-gray-50 min-h-screen">
+            <div className="mb-6 border-b border-green-500 pb-3 flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-gray-800">Danh sách nhân viên</h2>
             </div>
 
-            <div className="filter-section">
-                <div className="search-box">
+            {/* Filter Section */}
+            <div className="mb-6 flex flex-wrap gap-4 items-end bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                {/* Search Box */}
+                <div className="relative flex-1 min-w-[250px]">
                     <input
                         type="text"
                         placeholder="Tìm kiếm theo tên hoặc email..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="search-input"
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-green-400"
                     />
                     {searchTerm && (
-                        <button className="clear-search" onClick={() => setSearchTerm("")} title="Xóa tìm kiếm">
+                        <button
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500"
+                            onClick={() => setSearchTerm("")}
+                            title="Xóa tìm kiếm"
+                        >
                             ✕
                         </button>
                     )}
                 </div>
-                <div className="department-box">
-                    <label htmlFor="department">Phòng ban:</label>
+
+                {/* Department Filter */}
+                <div className="flex flex-col">
+                    <label htmlFor="department" className="text-sm font-medium text-gray-700 mb-1">
+                        Phòng ban:
+                    </label>
                     <select
                         id="department"
                         value={selectedDepartment}
                         onChange={(e) => setSelectedDepartment(e.target.value)}
-                        className="department-select"
+                        className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
                     >
                         <option value="all">Tất cả</option>
                         {DEPARTMENTS.map((dept) => (
@@ -133,13 +140,17 @@ function EmployeeList() {
                         ))}
                     </select>
                 </div>
-                <div className="sort-box">
-                    <label htmlFor="sortOrder">Sắp xếp:</label>
+
+                {/* Sort Filter */}
+                <div className="flex flex-col">
+                    <label htmlFor="sortOrder" className="text-sm font-medium text-gray-700 mb-1">
+                        Sắp xếp:
+                    </label>
                     <select
                         id="sortOrder"
                         value={sortOrder}
                         onChange={(e) => setSortOrder(e.target.value)}
-                        className="sort-select"
+                        className="border border-gray-300 rounded-lg px-3 w-30 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
                     >
                         <option value="desc">Mới nhất</option>
                         <option value="asc">Cũ nhất</option>
@@ -147,40 +158,43 @@ function EmployeeList() {
                 </div>
             </div>
 
-            <div className="table-container">
-                <table className="employee-table">
-                    <thead>
+            {/* Table Section */}
+            <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-200">
+                <table className="min-w-full text-sm text-left">
+                    <thead className="bg-green-500 text-white">
                         <tr>
-                            <th>ID</th>
-                            <th>Họ và tên</th>
-                            <th>Email</th>
-                            <th>Phòng ban</th>
-                            <th>Chức vụ</th>
-                            <th>Ngày vào làm</th>
-                            <th>Thao tác</th>
+                            <th className="py-3 px-4 font-semibold">ID</th>
+                            <th className="py-3 px-4 font-semibold">Họ và tên</th>
+                            <th className="py-3 px-4 font-semibold">Email</th>
+                            <th className="py-3 px-4 font-semibold">Phòng ban</th>
+                            <th className="py-3 px-4 font-semibold">Chức vụ</th>
+                            <th className="py-3 px-4 font-semibold">Ngày vào làm</th>
+                            <th className="py-3 px-4 font-semibold text-center">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredAndSortedEmployees.length > 0 ? (
                             filteredAndSortedEmployees.map((employee) => (
-                                <tr key={employee.id}>
-                                    <td>{employee.id}</td>
-                                    <td>{employee.fullName}</td>
-                                    <td>{employee.email}</td>
-                                    <td>{employee.department}</td>
-                                    <td>{employee.position}</td>
-                                    <td>{new Date(employee.startDate).toLocaleDateString("vi-VN")}</td>
-                                    <td>
+                                <tr key={employee.id} className="border-b hover:bg-gray-50 transition">
+                                    <td className="py-3 px-4">{employee.id}</td>
+                                    <td className="py-3 px-4 font-medium text-gray-800">{employee.fullName}</td>
+                                    <td className="py-3 px-4">{employee.email}</td>
+                                    <td className="py-3 px-4">{employee.department}</td>
+                                    <td className="py-3 px-4">{employee.position}</td>
+                                    <td className="py-3 px-4">
+                                        {new Date(employee.startDate).toLocaleDateString("vi-VN")}
+                                    </td>
+                                    <td className="py-3 px-4 text-center">
                                         <button
-                                            className="btn btn-edit"
                                             onClick={() => handleEdit(employee)}
+                                            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg mr-2 transition"
                                             title="Chỉnh sửa thông tin nhân viên"
                                         >
                                             Sửa
                                         </button>
                                         <button
-                                            className="btn btn-delete"
                                             onClick={() => handleDelete(employee)}
+                                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg transition"
                                             title="Xóa nhân viên"
                                         >
                                             Xóa
@@ -190,7 +204,7 @@ function EmployeeList() {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="7" className="no-data">
+                                <td colSpan="7" className="text-center py-6 text-gray-500">
                                     {searchTerm ? "Không tìm thấy kết quả phù hợp" : "Không có dữ liệu"}
                                 </td>
                             </tr>
